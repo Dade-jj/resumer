@@ -12,7 +12,7 @@
 
 <script>
 import 'normalize.css/normalize.css'
-import './assets/reset.css'
+import './assets/reset.scss'
 
 import Topbar from './components/Topbar'
 import ResumeEditor from './components/ResumeEditor'

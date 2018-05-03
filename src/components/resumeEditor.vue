@@ -5,7 +5,7 @@
         <li v-for="(item,index) in resume.config" :class="{active: item.field === selected}" @click="selected = item.field">
           <svg class="icon">
             <use :xlink:href="`#icon-${item.icon}`"></use>
-          </svg>  
+          </svg>
         </li>
       </ol>
     </nav>
@@ -13,12 +13,12 @@
       <li v-for="item in resume.config" v-show="item.field === selected">
         <div v-if="resume[item.field] instanceof Array">
             <div class="subitem" v-for="subitem in resume[item.field]">
-              <div class="resumeField" v-for="(value, key) in resume[item.field]">
+              <div class="resumeField" v-for="(value, key) in subitem">
                 <label>{{key}}</label>
                 <input type="text" :value="value">
               </div>
               <hr>
-            </div>  
+            </div>
         </div>
         <div v-else class="resumeField" v-for="(value, key) in resume[item.field]">
           <label>{{key}}</label>
@@ -34,7 +34,7 @@ export default {
   name: 'ResumeEditor',
   data () {
     return {
-      selected: 'profile',
+      selected: 'work history',
       resume: {
         config: [
           { field: 'profile', icon: 'id' },
@@ -42,34 +42,34 @@ export default {
           { field: 'education', icon: 'book' },
           { field: 'projects', icon: 'heart' },
           { field: 'awards', icon: 'cup' },
-          { field: 'contacts', icon: 'phone' },
+          { field: 'contacts', icon: 'phone' }
         ],
         profile: {
           name: '',
           city: '',
           title: ''
         },
-        'work history': 
+        'work history':
         [
           {company: 'AL', content: '我的第二份工作是'},
           {company: 'TX', content: '我的第一份工作是'}
         ],
         education: [
-            { school: 'AL', content: '文字' },
-           { school: 'TX', content: '文字' },
-         ],
-         projects: [
-            { name: 'project A', content: '文字' },
-           { name: 'project B', content: '文字' },          
-           ],
-         awards: [
-            { name: 'awards A', content: '文字' },
-           { name: 'awards B', content: '文字' },
-         ],
-         contacts: [
-           { contact: 'phone', content: '13812345678' },
-           { contact: 'qq', content: '12345678' },
-         ],
+          { school: 'AL', content: '文字' },
+          { school: 'TX', content: '文字' }
+        ],
+        projects: [
+          { name: 'project A', content: '文字' },
+          { name: 'project B', content: '文字' }
+        ],
+        awards: [
+          { name: 'awards A', content: '文字' },
+          { name: 'awards B', content: '文字' }
+        ],
+        contacts: [
+          { contact: 'phone', content: '13812345678' },
+          { contact: 'qq', content: '12345678' }
+        ]
       }
     }
   }
@@ -90,6 +90,7 @@ export default {
     ol {
       li {
         height: 48px;
+        padding: 12px 0;
         display: flex;
         justify-content: center;
         margin-top: 16px;
@@ -101,7 +102,7 @@ export default {
       }
     }
   }
-  .pannels {
+  .panels {
     flex-grow: 1;
     li {
       padding: 24px;

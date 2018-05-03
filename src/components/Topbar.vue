@@ -29,7 +29,7 @@ export default {
   .wrapper {
     display: flex;
     justify-content: space-between;
-    align-self: center;
+    align-items: center;
     padding: 0 16px;
   }
   .logo {
