@@ -3,16 +3,44 @@
     <div class="wrapper">
       <span class="logo">Resumer</span>
       <div class="actions">
-        <button class="primary">保存</button>
-        <button>预览</button>
+        <span>{{user}}</span>
+        <a href="#" class="button primary" @click.prevent="signUpDialogVisible=true">注册</a>
+        <MyDialog title="注册" :visible="signUpDialogVisible" @close="signUpDialogVisible = false">
+          <SignUpForm @success="login($event)"/>
+        </MyDialog>
+        <a class="button" href="#">登录</a>
+        <button class="button primary">保存</button>
+        <button class="button">预览</button>
+        
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import MyDialog from './MyDialog'
+import SignUpForm from './SignUpForm'
 export default {
-  name: 'Topbar'
+  name: 'Topbar',
+  data () {
+    return {
+      signUpDialogVisible: false
+    }
+  },
+  components: {
+    MyDialog,SignUpForm
+  },
+  computed: {
+    user () {
+      return this.$store.state.user
+    }
+  },
+  methods: {
+    login (user) {
+      this.signUpDialogVisible = false
+      this.$store.commit('setUser', user)
+    }
+  }
 }
 </script>
 
@@ -36,7 +64,7 @@ export default {
     font-size: 24px;
     color: #000;
   }
-  button {
+  .button {
     height: 32px;
     width: 72px;
     border: none;
@@ -44,6 +72,11 @@ export default {
     font-size: 18px;
     background: #ddd;
     color: #222;
+    text-decoration: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
     &:hover {
       box-shadow: 1px 1px 1px hsla(0, 0, 0, 0.50)
     }
@@ -53,4 +86,5 @@ export default {
     }
   }
 }
+
 </style>
