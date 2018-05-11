@@ -3,32 +3,43 @@
     <div class="wrapper">
       <span class="logo">Resumer</span>
       <div class="actions">
-        <span>{{user}}</span>
-        <a href="#" class="button primary" @click.prevent="signUpDialogVisible=true">注册</a>
-        <MyDialog title="注册" :visible="signUpDialogVisible" @close="signUpDialogVisible = false">
-          <SignUpForm @success="login($event)"/>
-        </MyDialog>
-        <a class="button" href="#">登录</a>
-        <button class="button primary">保存</button>
-        <button class="button">预览</button>
-        
+        <div v-if="logined" class="userActions">
+          <span class="welcome">你好，{{user.username}}</span>
+          <el-button class="button" href="#" @click.prevent="signOut">登出</el-button>
+        </div>
+        <div v-else class="userActions">
+          <el-button type="primary" href="#" class="button primary" @click.prevent="signUpDialogVisible=true">注册</el-button>
+          <el-button class="button" @click.prevent="signInDialogVisible = true" href="#">登录</el-button>
+        </div>
+        <el-button type="primary" class="button primary">保存</el-button>
+        <el-button class="button">预览</el-button>
       </div>
     </div>
+    <MyDialog title="注册" :visible="signUpDialogVisible" @close="signUpDialogVisible = false">
+      <SignUpForm @success="signIn($event)"/>
+    </MyDialog>
+    <MyDialog title="登录" :visible="signInDialogVisible" @close="signInDialogVisible = true">
+      <SignInForm @success="signIn($event)" />
+    </MyDialog>
   </div>
 </template>
 
 <script>
 import MyDialog from './MyDialog'
 import SignUpForm from './SignUpForm'
+import SignInForm from './SignInForm'
+import AV from '../lib/leancloud'
+
 export default {
   name: 'Topbar',
   data () {
     return {
-      signUpDialogVisible: false
+      signUpDialogVisible: false,
+      signInDialogVisible: false
     }
   },
   components: {
-    MyDialog,SignUpForm
+    MyDialog,SignUpForm,SignInForm
   },
   computed: {
     user () {
@@ -36,9 +47,17 @@ export default {
     }
   },
   methods: {
-    login (user) {
+    signOut () {
+      AV.User.logOut()
+      this.$store.commit('removeUser')
+    },
+    signIn (user) {
       this.signUpDialogVisible = false
+      this.signInDialogVisible = false
       this.$store.commit('setUser', user)
+    },
+    logined () {
+      return this.user.id;
     }
   }
 }
@@ -64,27 +83,16 @@ export default {
     font-size: 24px;
     color: #000;
   }
-  .button {
-    height: 32px;
-    width: 72px;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    background: #ddd;
-    color: #222;
-    text-decoration: none;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    vertical-align: middle;
-    &:hover {
-      box-shadow: 1px 1px 1px hsla(0, 0, 0, 0.50)
-    }
-    &.primary {
-      background: #02af5f;
-      color: white;
-    }
-  }
 }
+
+  .actions {
+    display: flex;
+    .userActions {
+      margin-right: 3em;
+      .welcome {
+        margin-right: .5em;
+      }
+     }
+  }
 
 </style>
